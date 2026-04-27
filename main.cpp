@@ -1,5 +1,5 @@
 #include <iostream>
 
 int main(){
-	returrn 0; 
+	return 0; 
 }
