@@ -43,7 +43,7 @@ void Lattice::randomStart(){
 	//auto deduces std::unique_ptr<Member>
 	for(auto& p : members){
 		if (p){
-			p->moveMember(this->uniform(0, this->lattice.getSidex()), this->uniform(0, this->lattice.getSidey()));
+			p->moveMember(this->uniform(0, this->lengthx), this->uniform(0, this->lengthy));
 			p->setSEIRstate(this->uniform(1,4));
 		}
 	}
