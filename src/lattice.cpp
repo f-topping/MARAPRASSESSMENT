@@ -10,11 +10,32 @@ void Lattice::updateRule(){
 	//shuffles order of members at start of turn to prevent the same member always having high priority, and some having low.
 	std::shuffle(members.begin(), members.end(), gen);
 
-	//possible moves	    left      right   up      down
+	//possible moves	                        left      right   up      down
+	//notably does NOT consider diagonals. Found the specification too vague to determine whether directionals were wanted or NOT.
 	const std::vector<std::pair<int,int>> directs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
 
 	//random choice generator
 	std::uniform_int_distribution<> directsDist(0, directs.size() - 1);
+
+	//cycles through members and moves them IF they are not moving to a clear spot
+	for (auto& p_ptr : members) { //for its pointer
+		Member* p = p_ptr.get(); //returns raw pointer
+		
+		//gets the current position so that adjacent can be determined
+		int currentx = p->getx();
+		int currenty = p->gety();
+		
+		//chooses random direction
+		auto chosendirect = directs[directsDist(gen)];
+ 		
+		//calculates new positions
+		int newx = currentx + chosendirect.first;
+		int newy = currenty + chosendirect.second;
+
+		//moves the member to the new position
+		lattice[newx][newy] = p; //changes the pointer of the lattice to the new position
+		p->moveMember(newx, newy); //changes the location properties of the member
+	}
 }
 
 //constructor
