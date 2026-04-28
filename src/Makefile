@@ -1,6 +1,6 @@
 CC = g++ #c++ compiler
 CFLAGS = -O2 -Wall -std=c++17 #compilation flags
-SRC = member.h member.cpp population.h population.cpp main.cpp #source files
+SRC = member.h member.cpp lattice.h lattice.cpp main.cpp #source files
 EXEC = program #names the executable as program
 OBJ = $(SRC:.cpp=.o) #converts .cpp to .o
 
