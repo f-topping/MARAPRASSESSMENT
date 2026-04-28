@@ -11,9 +11,9 @@ void Lattice::updateRule(){
 	std::shuffle(members.begin(), members.end(), gen);
 
 
-	//possible moves	                        left      right   up      down
+	//possible moves     left      right   up      down , diagonals
 	//notably does NOT consider diagonals. Found the specification too vague to determine whether directionals were wanted or NOT.
-	const std::vector<std::pair<int,int>> directs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+	const std::vector<std::pair<int,int>> directs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
 	//random choice generator
 	std::uniform_int_distribution<> directsDist(0, directs.size() - 1);
@@ -101,7 +101,7 @@ void Lattice::randomStart(){
 }
 
 //checks if a coordinate pair is within the lattice bounds
-//hard boundaries
+//hard boundaries - may encourage susceptible survival as infected may not find them via an extra direction (moving right to wrap around left is effectively moving left)
 bool Lattice::isValid(int testx, int testy){
 	return testx >= 0 && testx < lengthx && testy >=0 && testy < lengthy;
 }
