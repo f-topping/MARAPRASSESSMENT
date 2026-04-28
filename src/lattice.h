@@ -22,8 +22,8 @@ class Lattice {
 	public:
 		//update rng
 		void updateRule();
-		std::vector<int> directs;
-		std::uniform_int_distribution directsDist();
+		std::vector<std::pair<int,int>> directs;
+		std::uniform_int_distribution<> directsDist();
 
 		Lattice(int lengthx, int lengthy, int seed, int memberNumber);
 

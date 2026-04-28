@@ -11,10 +11,10 @@ void Lattice::updateRule(){
 	std::shuffle(members.begin(), members.end(), gen);
 
 	//possible moves	    left      right   up      down
-	std::vector<int> directs = ((-1, 0), (1, 0), (0, 1), (0, -1));
+	const std::vector<std::pair<int,int>> directs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
 
 	//random choice generator
-	std::uniform_int_distribution<int> directsDist(0, directs.size());
+	std::uniform_int_distribution<> directsDist(0, directs.size() - 1);
 }
 
 //constructor
