@@ -1,4 +1,4 @@
-##include "member.h"
+#include "member.h"
 #include <cstdlib>
 #include <iostream>
 #include <random>
@@ -35,6 +35,6 @@ void Member::moveMember(int xPos, int yPos){
 	y = yPos;
 }
 
-void setSEIRstate(int SEIRstate){
-	this->SEIRstate
+void Member::setSEIRstate(int givenSEIRstate){
+	this->SEIRstate = givenSEIRstate;
 }
