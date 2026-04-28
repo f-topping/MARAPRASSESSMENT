@@ -65,7 +65,8 @@ void Lattice::updateRule(){
 			}
 			if(progressCheck(exposureRate*infectedNeighbours)) p->setSEIRstate(2);
 
-		}
+		}//^maybe a switch-case method mightve looked better here
+		history.push_back(countSEIR());
 	}
 }
 
@@ -93,6 +94,7 @@ Lattice::Lattice(int lengthx, int lengthy, int seed, int memberNumber){
 	this->incubationRate = 0.5;
 	this->immunityRate = 0.5;
 	this->infectedNeighbours = 0;
+	std::vector<std::array<int, 4>> history;
 
 	//rng
 	this->gen = std::mt19937(seed);
@@ -153,4 +155,17 @@ bool Lattice::progressCheck(double rate){
 	}
 }
 
-
+//counts each SEIR member (for each update)
+std::array<int, 4> Lattice::countSEIR(){
+	std::array<int, 4> counts = {0, 0, 0, 0}; //SEIR states counts
+	for (auto& p_ptr : members) { //for each member ('s pointer)
+		int currentState = p_ptr->getSEIRstate(); //get their state
+		switch(currentState){ //goes through each possibility and increments where appropriate
+			case 1: counts[0]++; break;
+			case 2: counts[1]++; break;
+			case 3: counts[2]++; break;
+			case 4: counts[3]++; break;
+		}
+	}
+	return counts;
+}

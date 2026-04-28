@@ -6,6 +6,7 @@
 #include <memory>
 #include <algorithm>
 #include "member.h"
+#include <array>
 
 class Lattice {
 	private:
@@ -50,5 +51,8 @@ class Lattice {
 		double immunityRate; //immunity rate (gamma) - chance an infected becomes recovered (immume) after each step
 		bool progressCheck(double rate); //check
 		int infectedNeighbours;
+		std::vector<std::array<int, 4>> history;
+		std::array<int, 4> countSEIR();
+		int currentState;
 };
 #endif
