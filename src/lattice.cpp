@@ -24,12 +24,12 @@ Lattice::Lattice(int lengthx, int lengthy, int seed, int memberNumber){
 }
 
 //getters
-int Lattice::getSidex(){
-	return this->lengthx;
+int Lattice::getSidex() const{
+	return lengthx;
 }
 
-int Lattice::getSidey(){
-	return this->lengthy;
+int Lattice::getSidey() const{
+	return lengthy;
 }
 
 //rng for int numbers, input limits returns a random int between
@@ -40,7 +40,8 @@ int Lattice::uniform(int min, int max){
 
 //provides members random properties
 void Lattice::randomStart(){
-	for(Member* p : this->members){
+	//auto deduces std::unique_ptr<Member>
+	for(auto& p : members){
 		if (p){
 			p->moveMember(this->uniform(0, this->lattice.getSidex()), this->uniform(0, this->lattice.getSidey()));
 			p->setSEIRstate(this->uniform(1,4));
