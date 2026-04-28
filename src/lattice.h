@@ -4,8 +4,8 @@
 #include <vector>
 #include <random>
 #include <memory>
+#include <algorithm>
 #include "member.h"
-
 
 class Lattice {
 	private:
@@ -21,6 +21,7 @@ class Lattice {
 		
 	public:
 		//std::vector<Member>members;
+		void updateRule();
 
 		Lattice(int lengthx, int lengthy, int seed, int memberNumber);
 

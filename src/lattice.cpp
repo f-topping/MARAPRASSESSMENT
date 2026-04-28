@@ -5,6 +5,12 @@
 #include <memory>
 #include <random>
 
+//updates the "system" every step (movements of members, SEIR change)
+void Lattice::updateRule(){
+	//shuffles order of members at start of turn to prevent the same member always having high priority, and some having low.
+	std::shuffle(members.begin(), members.end(), gen);
+}
+
 //constructor
 Lattice::Lattice(int lengthx, int lengthy, int seed, int memberNumber){
 	//constructing
