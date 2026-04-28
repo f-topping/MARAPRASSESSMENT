@@ -58,6 +58,11 @@ Lattice::Lattice(int lengthx, int lengthy, int seed, int memberNumber){
 	//lattice (region) associated with the members
 	this->lattice = std::vector<std::vector<Member*>>(lengthx, std::vector<Member*>(lengthy, nullptr));
 	
+	//for distributed start
+	this->shouldRestart = true;
+	this->potentialx = 0;
+	this->potentialy = 0;
+
 	//rng
 	this->gen = std::mt19937(seed);
 }
@@ -82,8 +87,15 @@ void Lattice::randomStart(){
 	//auto deduces std::unique_ptr<Member>
 	for(auto& p : members){
 		if (p){
-			p->moveMember(this->uniform(0, this->lengthx), this->uniform(0, this->lengthy));
-			p->setSEIRstate(this->uniform(1,4));
+			shouldRestart = true;
+			while(shouldRestart){
+				potentialx = this->uniform(0,this->lengthx);
+				potentialy = this->uniform(0,this->lengthy);
+				if(isOccupied(potentialx, potentialy)) continue;
+				p->moveMember(potentialx, potentialy);
+				p->setSEIRstate(this->uniform(1,4));
+				shouldRestart = false;
+			}
 		}
 	}
 }

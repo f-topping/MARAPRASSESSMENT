@@ -35,6 +35,10 @@ class Lattice {
 		int uniform(int min, int max);
 		void randomStart();
 
+		int potentialx;
+		int potentialy;
+		bool shouldRestart;
+
 		int getSidex() const;
 		int getSidey() const;
 };
