@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "member.h"
 #include <array>
+#include <fstream>
 
 class Lattice {
 	private:
@@ -50,9 +51,10 @@ class Lattice {
 		double incubationRate; //incubation rate (sigma) - chance an exposed becomes infected after each step
 		double immunityRate; //immunity rate (gamma) - chance an infected becomes recovered (immume) after each step
 		bool progressCheck(double rate); //check
-		int infectedNeighbours;
-		std::vector<std::array<int, 4>> history;
-		std::array<int, 4> countSEIR();
-		int currentState;
+		int infectedNeighbours; //number of neighbours a cell has that are infected
+		std::vector<std::array<int, 4>> history; //for recording all SEIR information
+		std::array<int, 4> countSEIR(); //for counting No. each SEIR per step
+		int currentState; //current SEIR state for counting
+		void writeCSV(); //writes SEIR history to a csv for graphing
 };
 #endif

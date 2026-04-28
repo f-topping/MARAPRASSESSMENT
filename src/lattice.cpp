@@ -83,6 +83,8 @@ Lattice::Lattice(int lengthx, int lengthy, int seed, int memberNumber){
 	
 	//lattice (region) associated with the members
 	this->lattice = std::vector<std::vector<Member*>>(lengthx, std::vector<Member*>(lengthy, nullptr));
+
+	this->members.resize(this->memberNumber);
 	
 	//for distributed start
 	this->shouldRestart = true;
@@ -168,4 +170,12 @@ std::array<int, 4> Lattice::countSEIR(){
 		}
 	}
 	return counts;
+}
+
+void Lattice::writeCSV(){
+	std::ofstream file("SEIRrecord.csv");
+	file << "t,S,E,I,R \n";
+	for (size_t t=0; t < history.size(); ++t){
+		file << t << "," << history[t][0] << "," << history[t][1] << "," << history[t][2] << "," << history [t][3] << "\n";
+	}
 }
