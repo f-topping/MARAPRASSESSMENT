@@ -10,6 +10,7 @@ void Lattice::updateRule(){
 	//shuffles order of members at start of turn to prevent the same member always having high priority, and some having low.
 	std::shuffle(members.begin(), members.end(), gen);
 
+
 	//possible moves	                        left      right   up      down
 	//notably does NOT consider diagonals. Found the specification too vague to determine whether directionals were wanted or NOT.
 	const std::vector<std::pair<int,int>> directs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
@@ -31,8 +32,13 @@ void Lattice::updateRule(){
 		//calculates new positions
 		int newx = currentx + chosendirect.first;
 		int newy = currenty + chosendirect.second;
+		
+		//checks if the new position is off the lattice or already taken, skips to next 
+		if (!isValid(newx, newy)) continue;
+		if (isOccupied(newx, newy)) continue;
 
 		//moves the member to the new position
+		lattice[currentx][currenty] = nullptr; //makes the old position empty
 		lattice[newx][newy] = p; //changes the pointer of the lattice to the new position
 		p->moveMember(newx, newy); //changes the location properties of the member
 	}
@@ -80,4 +86,15 @@ void Lattice::randomStart(){
 			p->setSEIRstate(this->uniform(1,4));
 		}
 	}
+}
+
+//checks if a coordinate pair is within the lattice bounds
+//hard boundaries
+bool Lattice::isValid(int testx, int testy){
+	return testx >= 0 && testx < lengthx && testy >=0 && testy < lengthy;
+}
+
+//checks if a coordinate pair has a member associated
+bool Lattice::isOccupied(int testx, int testy){
+	return lattice[testx][testy] != nullptr;
 }

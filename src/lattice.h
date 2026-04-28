@@ -24,6 +24,8 @@ class Lattice {
 		void updateRule();
 		std::vector<std::pair<int,int>> directs;
 		std::uniform_int_distribution<> directsDist();
+		bool isValid(int testx, int testy);
+		bool isOccupied(int testx, int testy);
 
 		Lattice(int lengthx, int lengthy, int seed, int memberNumber);
 
