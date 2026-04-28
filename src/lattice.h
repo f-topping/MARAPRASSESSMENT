@@ -24,6 +24,7 @@ class Lattice {
 		void updateRule();
 		std::vector<std::pair<int,int>> directs;
 		std::uniform_int_distribution<> directsDist();
+		std::uniform_real_distribution<double> zeroOneDist();
 		bool isValid(int testx, int testy);
 		bool isOccupied(int testx, int testy);
 
@@ -38,8 +39,16 @@ class Lattice {
 		int potentialx;
 		int potentialy;
 		bool shouldRestart;
-
+		
+		//getters for probing
 		int getSidex() const;
 		int getSidey() const;
+
+		//SEIR 
+		double exposureRate; //exposure rate (theta) - chance a susceptible member becomes exposed after collision with infected
+		double incubationRate; //incubation rate (sigma) - chance an exposed becomes infected after each step
+		double immunityRate; //immunity rate (gamma) - chance an infected becomes recovered (immume) after each step
+		bool progressCheck(double rate); //check
+
 };
 #endif

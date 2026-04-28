@@ -12,7 +12,6 @@ void Lattice::updateRule(){
 
 
 	//possible moves     left      right   up      down , diagonals
-	//notably does NOT consider diagonals. Found the specification too vague to determine whether directionals were wanted or NOT.
 	const std::vector<std::pair<int,int>> directs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
 	//random choice generator
@@ -41,6 +40,14 @@ void Lattice::updateRule(){
 		lattice[currentx][currenty] = nullptr; //makes the old position empty
 		lattice[newx][newy] = p; //changes the pointer of the lattice to the new position
 		p->moveMember(newx, newy); //changes the location properties of the member
+		
+		//checks if SEIR members E or I should move to next stage
+		if(p->getSEIRstate() == 2){
+			if(progressCheck(incubationRate)) p->setSEIRstate(3);
+		}
+		if(p->getSEIRstate() == 3){
+			if(progressCheck(immunityRate)) p->setSEIRstate(4);
+		}
 	}
 }
 
@@ -62,6 +69,11 @@ Lattice::Lattice(int lengthx, int lengthy, int seed, int memberNumber){
 	this->shouldRestart = true;
 	this->potentialx = 0;
 	this->potentialy = 0;
+
+	//SEIR
+	this->exposureRate = 0.5;
+	this->incubationRate = 0.5;
+	this->immunityRate = 0.5;
 
 	//rng
 	this->gen = std::mt19937(seed);
@@ -109,4 +121,15 @@ bool Lattice::isValid(int testx, int testy){
 //checks if a coordinate pair has a member associated
 bool Lattice::isOccupied(int testx, int testy){
 	return lattice[testx][testy] != nullptr;
+}
+
+//checks if a member should move to next stage of SEIR
+bool Lattice::progressCheck(double rate){
+	std::uniform_real_distribution<double> zeroOneDist(0.0,0.1);
+	if(zeroOneDist(gen) > rate){
+		return false;
+	}
+	else{
+		return true;
+	}
 }
