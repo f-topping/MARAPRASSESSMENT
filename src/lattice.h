@@ -20,12 +20,14 @@ class Lattice {
 		std::vector<std::unique_ptr<Member>> members;
 		
 	public:
-		//std::vector<Member>members;
+		//update rng
 		void updateRule();
+		std::vector<int> directs;
+		std::uniform_int_distribution directsDist();
 
 		Lattice(int lengthx, int lengthy, int seed, int memberNumber);
 
-		//rng
+		//init rng
 		std::mt19937 gen;
 		std::uniform_int_distribution<int> uniformIntDist;
 		int uniform(int min, int max);

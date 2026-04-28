@@ -9,6 +9,12 @@
 void Lattice::updateRule(){
 	//shuffles order of members at start of turn to prevent the same member always having high priority, and some having low.
 	std::shuffle(members.begin(), members.end(), gen);
+
+	//possible moves	    left      right   up      down
+	std::vector<int> directs = ((-1, 0), (1, 0), (0, 1), (0, -1));
+
+	//random choice generator
+	std::uniform_int_distribution<int> directsDist(0, directs.size());
 }
 
 //constructor
