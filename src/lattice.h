@@ -3,7 +3,9 @@
 
 #include <vector>
 #include <random>
+#include <memory>
 #include "member.h"
+
 
 class Lattice {
 	private:
@@ -17,8 +19,6 @@ class Lattice {
 		std::vector<std::vector<Member*>> lattice;
 		std::vector<std::unique_ptr<Member>> members;
 		
-		//rng
-		std::mt19937 gen;
 	public:
 		//std::vector<Member>members;
 
@@ -26,8 +26,11 @@ class Lattice {
 
 		//rng
 		std::mt19937 gen;
-		std::uniform_int_distribution<int> uniformIntDist
+		std::uniform_int_distribution<int> uniformIntDist;
 		int uniform(int min, int max);
-		void randomStart()
+		void randomStart();
+
+		int getSidex();
+		int getSidey();
 };
 #endif
