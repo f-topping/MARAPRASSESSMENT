@@ -41,12 +41,30 @@ void Lattice::updateRule(){
 		lattice[newx][newy] = p; //changes the pointer of the lattice to the new position
 		p->moveMember(newx, newy); //changes the location properties of the member
 		
-		//checks if SEIR members E or I should move to next stage
+		//checks if SEIR members S or E or I should move to next stage
 		if(p->getSEIRstate() == 2){
 			if(progressCheck(incubationRate)) p->setSEIRstate(3);
 		}
 		if(p->getSEIRstate() == 3){
 			if(progressCheck(immunityRate)) p->setSEIRstate(4);
+		}
+		
+		if(p->getSEIRstate() == 1){
+			//counts infected neighbours for a chance to expose the member
+			infectedNeighbours = 0;
+			for (const auto& d : directs) { //checks each direction
+				int checkx = currentx + d.first; //coordinates of neighouring cell
+				int checky = currenty + d.second;
+			
+				if(!isValid(checkx, checky)) continue; //no need to check SEIR if cell is off the lattice
+			
+				Member* neighbour = lattice[checkx][checky];
+				if(neighbour && neighbour->getSEIRstate() == 2){
+					infectedNeighbours += 1;
+				}
+			}
+			if(progressCheck(exposureRate*infectedNeighbours)) p->setSEIRstate(2);
+
 		}
 	}
 }
@@ -71,9 +89,10 @@ Lattice::Lattice(int lengthx, int lengthy, int seed, int memberNumber){
 	this->potentialy = 0;
 
 	//SEIR
-	this->exposureRate = 0.5;
+	this->exposureRate = 0.05;
 	this->incubationRate = 0.5;
 	this->immunityRate = 0.5;
+	this->infectedNeighbours = 0;
 
 	//rng
 	this->gen = std::mt19937(seed);
@@ -133,3 +152,5 @@ bool Lattice::progressCheck(double rate){
 		return true;
 	}
 }
+
+

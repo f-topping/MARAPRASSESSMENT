@@ -49,6 +49,6 @@ class Lattice {
 		double incubationRate; //incubation rate (sigma) - chance an exposed becomes infected after each step
 		double immunityRate; //immunity rate (gamma) - chance an infected becomes recovered (immume) after each step
 		bool progressCheck(double rate); //check
-
+		int infectedNeighbours;
 };
 #endif
