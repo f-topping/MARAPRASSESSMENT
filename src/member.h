@@ -4,26 +4,27 @@
 class Member {
 	private:
 		//coordinates
-		double x;
-		double y;
+		int x;
+		int y;
+
+		//SEIR compartment
+		//0-empty, 1-susceptible, 2-exposed, 3-infected, 4-recovered
+		int SEIRstate;
 
 	public:
 		Member(); //constructor
 
-		//cell the member will attempt to move to (1-8 left to right, up to down)
-		void findMoveIntention();
+		//which way a member will try to go (will fail if cell does not exist or is occupied)	
 		int moveIntention;
-
-		//SIER compartment 
-		//0 - empty, 1 - susceptible, 2 - exposed, 3 - infected, 4 - recovered
-		int SIERstate;
 
 		//getters
 		int getx();
 		int gety();
+		int getSEIRstate();
 
-		//setter
+		//setters
 		void moveMember(int xPos, int yPos);
-}
+		void setSEIRstate(int SEIRstate);
+};
 
 #endif

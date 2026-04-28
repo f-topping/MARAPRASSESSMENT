@@ -1,7 +1,9 @@
 #ifndef POPULATION_H
 #define SYSTEM_H
 
-#include  <random>
+#include <random>
+#include <vector>
+#include "member.h"
 
 class Population {
 	public:
@@ -10,10 +12,14 @@ class Population {
 		int seed;
 		int memberNumber;
 		double sideLength;
+
+		std::vector<Member> members;
 		
 		//for initialising locations
 		std::mt19937 gen;
-		std::uniform_real_distribution<double> uniformDist;
-		double uniform(double min double max);
+		std::uniform_int_distribution<int> uniformIntDist;
+		int uniform(int min, int max);
 		void randomStart();
 };
+
+#endif

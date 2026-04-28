@@ -3,7 +3,7 @@
 #include <cmath>
 
 //constructor
-Population:Population(int seed, int memberNumber, double sideLength){
+Population::Population(int seed, int memberNumber, double sideLength){
 	//constructing
 	std::cout << "Creating population..." << std::endl;
 
@@ -18,13 +18,16 @@ Population:Population(int seed, int memberNumber, double sideLength){
 	this->gen = std::mt19937(seed);
 }
 
-//uniform (rng) method
-double Population::uniform(double min, double max){
-	return (max-min)*this->uniformDist(gen)+min;
+//uniform generator method
+int Population::uniform(int min, int max){
+	std::uniform_int_distribution<int> uniformIntDist(min, max);
+	return uniformIntDist(gen);
+}
 
 //places the members in random positions in the lattice for the simulation
 void Population::randomStart(){
-	for(Member &m : this->members){
-		m.x = this->uniform(0, this->simulationLattice.getSidex());
-		m.y = this->uniform(0, this->simulationLattice.getSidey());
-		m.theta = this->uniform(-M_PI, M_PI);
+	for(Member &p : this->members){
+		p.moveMember(this->uniform(0,this->simulationLattice.getSidex()), this->uniform(0, this->simulationLattice.getSidey()));
+		p.setSEIRstate(this->uniform(1,4));
+	}
+}
