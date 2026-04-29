@@ -2,7 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt #librarys
 
 #load csv in
-data = pd.read_csv("SEIRrecord.csv")
+data = pd.read_csv("SEIRrecord.csv") #CHANGE THIS FOR PIPELINED DATA#
+#DEFAULT = "SEIRrecord.csv"
+
 data.columns = data.columns.str.strip() #removes spaces from header titles
 
 #SEIR vs time
