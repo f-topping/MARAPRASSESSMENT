@@ -36,17 +36,21 @@ class Lattice {
 		std::mt19937 gen;
 		std::uniform_int_distribution<int> uniformIntDist;
 		int uniform(int min, int max);
-		void randomStart();
 
+		//init
+		void randomStart();
 		int potentialx;
 		int potentialy;
 		bool shouldRestart;
-		
+		int SEIRdecider;
+
 		//getters for probing
 		int getSidex() const;
 		int getSidey() const;
 
-		//SEIR 
+		//SEIR
+		int SChance; //chances for each seir upon start, expressed as integer percentages
+		int EChance;
 		double exposureRate; //exposure rate (theta) - chance a susceptible member becomes exposed after collision with infected
 		double incubationRate; //incubation rate (sigma) - chance an exposed becomes infected after each step
 		double immunityRate; //immunity rate (gamma) - chance an infected becomes recovered (immume) after each step

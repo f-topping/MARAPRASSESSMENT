@@ -63,7 +63,6 @@ void Lattice::updateRule(){
 					infectedNeighbours += 1;
 				}
 			}
-			std::cout << infectedNeighbours;
 			if(progressCheck(exposureRate*infectedNeighbours)) p->setSEIRstate(2);
 
 		}//^maybe a switch-case method mightve looked better here
@@ -96,9 +95,12 @@ Lattice::Lattice(int lengthx, int lengthy, int seed, int memberNumber){
 	this->potentialy = 0;
 
 	//SEIR
+	this->SChance = 95;
+	this->EChance = 5;
+	
 	this->exposureRate = 1;
-	this->incubationRate = 0.5;
-	this->immunityRate = 0.5;
+	this->incubationRate = 0.1;
+	this->immunityRate = 0.005;
 	this->infectedNeighbours = 0;
 
 	//rng
@@ -131,7 +133,15 @@ void Lattice::randomStart(){
 				potentialy = this->uniform(0,this->lengthy-1);
 				if(isOccupied(potentialx, potentialy)) continue;
 				p->moveMember(potentialx, potentialy);
-				p->setSEIRstate(this->uniform(1,4));
+				int SEIRdecider = this->uniform(1,100);
+				if(SEIRdecider <= EChance)
+				{
+					p->setSEIRstate(2);
+				}
+				else if(SEIRdecider > EChance && SEIRdecider <= (EChance+SChance))
+				{
+					p->setSEIRstate(1);
+				}
 				lattice[potentialx][potentialy] = p.get();
 				shouldRestart = false;
 			}
