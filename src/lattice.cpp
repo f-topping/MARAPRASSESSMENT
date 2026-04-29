@@ -53,21 +53,22 @@ void Lattice::updateRule(){
 			//counts infected neighbours for a chance to expose the member
 			infectedNeighbours = 0;
 			for (const auto& d : directs) { //checks each direction
-				int checkx = currentx + d.first; //coordinates of neighouring cell
-				int checky = currenty + d.second;
+				int checkx = newx + d.first; //coordinates of neighouring cell
+				int checky = newy + d.second;
 			
 				if(!isValid(checkx, checky)) continue; //no need to check SEIR if cell is off the lattice
 			
 				Member* neighbour = lattice[checkx][checky];
-				if(neighbour && neighbour->getSEIRstate() == 2){
+				if(neighbour && neighbour->getSEIRstate() == 3){
 					infectedNeighbours += 1;
 				}
 			}
+			std::cout << infectedNeighbours;
 			if(progressCheck(exposureRate*infectedNeighbours)) p->setSEIRstate(2);
 
 		}//^maybe a switch-case method mightve looked better here
-		history.push_back(countSEIR());
 	}
+	history.push_back(countSEIR());
 }
 
 //constructor
@@ -84,7 +85,10 @@ Lattice::Lattice(int lengthx, int lengthy, int seed, int memberNumber){
 	//lattice (region) associated with the members
 	this->lattice = std::vector<std::vector<Member*>>(lengthx, std::vector<Member*>(lengthy, nullptr));
 
-	this->members.resize(this->memberNumber);
+	this->members.resize(this->memberNumber);//makes members list (vector)
+	for (auto& p : members) {
+		p = std::make_unique<Member>();  //assigns each spot in the list a member
+	}
 	
 	//for distributed start
 	this->shouldRestart = true;
@@ -92,11 +96,10 @@ Lattice::Lattice(int lengthx, int lengthy, int seed, int memberNumber){
 	this->potentialy = 0;
 
 	//SEIR
-	this->exposureRate = 0.05;
+	this->exposureRate = 1;
 	this->incubationRate = 0.5;
 	this->immunityRate = 0.5;
 	this->infectedNeighbours = 0;
-	std::vector<std::array<int, 4>> history;
 
 	//rng
 	this->gen = std::mt19937(seed);
@@ -124,11 +127,12 @@ void Lattice::randomStart(){
 		if (p){
 			shouldRestart = true;
 			while(shouldRestart){
-				potentialx = this->uniform(0,this->lengthx);
-				potentialy = this->uniform(0,this->lengthy);
+				potentialx = this->uniform(0,this->lengthx-1);
+				potentialy = this->uniform(0,this->lengthy-1);
 				if(isOccupied(potentialx, potentialy)) continue;
 				p->moveMember(potentialx, potentialy);
 				p->setSEIRstate(this->uniform(1,4));
+				lattice[potentialx][potentialy] = p.get();
 				shouldRestart = false;
 			}
 		}
@@ -148,7 +152,7 @@ bool Lattice::isOccupied(int testx, int testy){
 
 //checks if a member should move to next stage of SEIR
 bool Lattice::progressCheck(double rate){
-	std::uniform_real_distribution<double> zeroOneDist(0.0,0.1);
+	std::uniform_real_distribution<double> zeroOneDist(0.0,1.0);
 	if(zeroOneDist(gen) > rate){
 		return false;
 	}
